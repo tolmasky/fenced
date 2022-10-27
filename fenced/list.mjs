@@ -1,4 +1,3 @@
-
 export default function List(item, next = List.Empty)
 {//console.log("ITEM IS", item);
 //    if (!item) { console.log(Error().stack) };
@@ -8,6 +7,50 @@ export default function List(item, next = List.Empty)
     this.count = next.count + 1;
     this.item = item;
     this.next = next;
+}
+
+List.prototype[Symbol.iterator] = function * ()
+{
+    if (this.count <= 0)
+        return;
+
+    yield this.item;
+    yield * this.next[Symbol.iterator]();
+}
+
+List.prototype.mapcat = function (f, rhs)
+{
+    return this.count <= 0 ?
+        rhs :
+        List(f(this.item), this.next.mapcat(f, rhs));
+}
+
+List.prototype.concat = function (rhs)
+{
+    return this.count <= 0 ?
+        rhs :
+        List(this.item, this.next.concat(rhs));
+}
+
+List.prototype.join = function (...args)
+{
+    return [...this].join(...args);
+}
+
+List.prototype.map = function (f, self, index = 0, original = this)
+{
+    return this.count <= 0 ?
+        List.Empty :
+        List(
+            f.call(self, this.item, index, original),
+            this.next.map(f, self, index + 1, original));
+}
+
+List.prototype.reverse = function (next = List.Empty)
+{
+    return this.count <= 0 ?
+        next :
+        this.next.reverse(List(this.item, next));
 }
 
 List.prototype.pop = function ()

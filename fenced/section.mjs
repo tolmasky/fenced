@@ -5,8 +5,8 @@ export default function Section
 ({ 
     heading,
     depth = heading.depth,
-    preamble = List.Empty,
-    children = List.Empty
+    preamble = [],
+    children = []//List.Empty
 })
 {
     if (!(this instanceof Section))
@@ -19,7 +19,7 @@ export default function Section
 };
 
 const adopt = key => (item, { [key]: list, ...rest }) =>
-    Section({ ...rest, [key]: list.push(item) });
+    Section({ ...rest, [key]: list.concat(item) });
 const toSection = heading => Section({ heading });
 const toHeading = value =>
     ({ type: "heading", depth:0, children:[{ type: "text", value }] });
@@ -27,9 +27,10 @@ const toHeading = value =>
 Section.fromMDAST = (document, title) =>
     collapse(1, document
         .children
-        .reduce((stack, node) => node.type !== "heading" ?
-            stack.pop().push(adopt("preamble")(node, stack.peek())) :
-            collapse(node.depth, stack).push(toSection(node)),
+        .reduce((stack, node) =>
+            node.type !== "heading" ?
+                stack.pop().push(adopt("preamble")(node, stack.peek())) :
+                collapse(node.depth, stack).push(toSection(node)),
             List(toSection(toHeading(title)))))
         .peek();
 
@@ -39,4 +40,5 @@ function collapse(depth, stack)
         .take({ while: section => depth > section.depth });
 
     return remaining.push(shallower.reduce(adopt("children")));
+//    return remaining.reverse().push(shallower.reverse().reduce(adopt("children")));
 }
