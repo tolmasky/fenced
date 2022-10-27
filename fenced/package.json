@@ -1,0 +1,17 @@
+{
+  "name": "fenced",
+  "version": "1.0.0-alpha.1",
+  "description": "",
+  "main": "fenced.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "Francisco Ryan Tolmasky I <tolmasky@gmail.com> (https://tolmasky.com/)",
+  "license": "MIT",
+  "dependencies": {
+    "remark": "^14.0.2",
+    "remark-parse": "^10.0.1",
+    "unified": "^10.1.2"
+  }
+}
