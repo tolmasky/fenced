@@ -3,6 +3,16 @@ import fs from "node:fs";
 ```
 
 
+```grammarkdown
+ExportDirective:
+    `export` `default` HoistableDeclaration
+```
+
+```x.js
+console.log("WHOA");
+```
+
+
 # Hi
 
 ```js
